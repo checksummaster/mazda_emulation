@@ -99,6 +99,15 @@ var timer = setInterval(function(){
     }
 }, 100);
 
+var timer2 = setInterval(function(){ 
+    addAdditionalApps();
+    if ( systemApp.hasAdditionalApps ) {
+        clearInterval(timer2);
+    }
+}, 100);
+
+
+
 GuiFramework.prototype._getStartupSettings = _getStartupSettingsOverwrite;
 
 
