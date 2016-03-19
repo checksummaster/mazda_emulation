@@ -1,0 +1,10 @@
+{
+  "name": "casdkemu",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "devDependencies": {
+    "ws": "^1.0.1"
+  }
+}
