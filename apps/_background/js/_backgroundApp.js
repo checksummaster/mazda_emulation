@@ -15,6 +15,9 @@ function _backgroundApp(uiaId)
     // Base application functionality is provided in a common location via this call to baseApp.init().
     // See framework/js/BaseApp.js for details.
     baseApp.init(this, uiaId);
+
+
+    //Common.prototype.commonControlsUpdateComplete = function(transitionData)
 }
 
 
@@ -37,7 +40,7 @@ _backgroundApp.prototype.appInit = function()
         "Start": { // initial context must be called "Start"
             "sbName": "Background",
             "template": "BackgroundTmplt",
-            "templatePath": "apps/custom/_background/templates/Background", //only needed for app-specific templates
+            "templatePath": "apps/_custom/_background/templates/Background", //only needed for app-specific templates
             "readyFunction": this._StartContextReady.bind(this)
         } 
     }; 

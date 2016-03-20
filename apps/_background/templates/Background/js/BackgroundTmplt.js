@@ -48,23 +48,24 @@ function BackgroundTmplt(uiaId, parentDiv, templateID, controlProperties)
     this.select = -1;
     this.imagelist = [];
 
-    utility.loadScript("apps/custom/_background/images/background/list.js", null, function() {
+    utility.loadScript("apps/_custom/_background/images/background/list.js", null, function() {
 
         for (var i = 0; i < iconlist.length ; i++) {
             var img = document.createElement('img');
-            img.setAttribute('src','apps/custom/_background/images/' + iconlist[i] );
+            img.setAttribute('src','apps/_custom/_background/images/' + iconlist[i] );
             img.setAttribute('width','225px');
             img.setAttribute('height','135px');
             this.slider.appendChild(img);
             this.imagelist.push({
                 img:img,
-                link: 'apps/custom/_background/images/' + backgroundlist[i]
+                link: 'apps/_custom/_background/images/' + backgroundlist[i]
             });
         }        
         this.MakeSelection(0);
         
 
     }.bind(this));
+ 
 
 };
 
@@ -92,28 +93,12 @@ BackgroundTmplt.prototype.MakeSelection = function(selection)
         this.slider.style.top = slidertop - pagetop + "px";
     }
 
-
-/*
-    var min = this.imagelist[this.select].img.offset().top - this.divElt.offset().top;
-    var max = min + this.imagelist[this.select].img.height();
-    var minvisible = this.position;
-    var maxvisible = minvisible + 410;
-    
-    if (min < minvisible) {
-        this.position = min;
-        console.log("lower");
-    }
-    
-    if (max > maxvisible ) {
-        this.position = max - 410;
-        console.log("high");
-    }
-
-    this.divElt.style.top = -this.position + "px"; */   
+  
 };
 
 BackgroundTmplt.prototype.setBackground = function()
 {
+    localStorage.setItem("background", "url('" + this.imagelist[this.select].link  + "')");
     document.getElementById('CommonBgImg1').style.background = "url('" + this.imagelist[this.select].link  + "')"; 
     framework.sendEventToMmui("common", "Global.GoBack");   
 };
@@ -220,7 +205,7 @@ BackgroundTmplt.prototype.handleControllerEvent = function(eventID)
             break;
         case "down":
             break;
-            
+
         default:
             // No action
             break;

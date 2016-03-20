@@ -37,7 +37,7 @@ _helloworldApp.prototype.appInit = function()
         "Start": { // initial context must be called "Start"
             "sbName": "Hello World",
             "template": "HelloWorldTmplt",
-            "templatePath": "apps/custom/_helloworld/templates/HelloWorld", //only needed for app-specific templates
+            "templatePath": "apps/_custom/_helloworld/templates/HelloWorld", //only needed for app-specific templates
             "readyFunction": this._StartContextReady.bind(this)
         } // end of "HelloWorld"
     }; // end of this.contextTable object

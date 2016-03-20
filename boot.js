@@ -1,3 +1,6 @@
+var UseNativeSDK = false; // false for CASDK
+
+
 //////
 // Let system thinking it under opera 12.10
 //////
@@ -92,22 +95,52 @@ _getStartupSettingsOverwrite = function()
     }
 }
 
+
+
 var timer = setInterval(function(){ 
     if ( MainMenuCtrl.prototype._invokeSelectCallback !== undefined ) {
         MainMenuCtrl.prototype._invokeSelectCallback = _invokeSelectCallbackOverwrite;
         clearInterval(timer);
+
+
     }
 }, 100);
 
-var timer2 = setInterval(function(){ 
-    addAdditionalApps();
-    if ( systemApp.hasAdditionalApps ) {
-        clearInterval(timer2);
-    }
-}, 100);
+if (UseNativeSDK) {
+    var timer2 = setInterval(function(){ 
+        addAdditionalApps();
+        if ( systemApp.hasAdditionalApps ) {
+            clearInterval(timer2);
+        }
+    }, 100);
+} else {
+    var timer2 = setInterval(function(){ 
+        CustomApplicationsProxy.bootstrap();
+        if ( CustomApplicationsProxy.bootstrapped ) {
+            clearInterval(timer2);
+        }
+    }, 100);
+}
+
+var timer3 = setInterval(function(){ 
+    var obj = document.getElementById('CommonBgImg1');
+    if ( obj !== undefined ) {
+        if ( localStorage.background !== undefined ) {
+            try {
+                obj.style.background = localStorage.background;
+            }
+            catch(e) {
+
+            } 
+        }
+        clearInterval(timer3);
+
+    } 
+}.bind(this), 100);
 
 
 
 GuiFramework.prototype._getStartupSettings = _getStartupSettingsOverwrite;
+
 
 
