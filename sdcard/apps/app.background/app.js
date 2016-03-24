@@ -143,7 +143,6 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 
 		this.table = [];
 
-
 		for (var i = 0; i < backgroundlist.length ; i++) {
 			var elem = $("<image src='" + this.location + iconlist[i] + "' width='225' height='135' />");
 			this.image_slider.append(elem);
@@ -152,32 +151,8 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 		this.max = backgroundlist.length;
 		this.updatepos();
 
-    	this.line = 135;
-/*
- 
-
-		document.getElementById('CommonBgImg1').addEventListener('DOMAttrModified', function(e){
-  			if (e.attrName === 'style') {
-    			console.log('prevValue: ' + e.prevValue, 'newValue: ' + e.newValue);
-			}
-		}, false);
-
-
-		$("#CommonBgImg1").on("webkitTransitionEnd transitionend", function(e) {
-		  console.log("end", e);
-		  alert("z-index changed");
-		});
-
-		document.getElementById('CommonBgImg1').style.background = "url('" + this.table[this.select].link  + "')";
-*/
-
-		$(window).on('load', function(){
-			$('#CommonBgImg1').css('background',"url('" + this.table[this.select].link  + "')");
-		});
-
-		if ( $('#CommonBgImg1').css('background') !== "url('" + this.table[this.select].link  + "')" ) {
-			$('#CommonBgImg1').css('background',"url('" + this.table[this.select].link  + "')");
-		}
+    	$('#CommonBgImg1').css('background',"url('" + localStorage.background  + "')");
+		Common._defaultBgPath = localStorage.background;
 
 	},
 
@@ -381,10 +356,9 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 			case this.SELECT:
 				//document.getElementById('CommonBgImg1').style.background = "url('" + this.table[this.select].link  + "')";
 				$('#CommonBgImg1').css('background',"url('" + this.table[this.select].link  + "')");
-
-				//framework.sendEventToMmui("common", "Global.IntentHome");
+				framework.common._defaultBgPath = this.table[this.select].link;
+				localStorage.setItem("background", this.table[this.select].link);
 				framework.sendEventToMmui("common", "Global.GoBack");
-				//framework.sendEventToMmui(this.uiaId, 'SubmitKeyboardInput', {payload : { input:extraParams.input, type:type, isValid:isValid }});
 				break;
 
 			/*

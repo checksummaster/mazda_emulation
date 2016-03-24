@@ -7,7 +7,9 @@ var UseNativeSDK = false; // false for CASDK
 window.opera = {
     version: function () {
         return 12.10;
-    }
+    },
+    addEventListener: function(eventname, callback ) { // Fake addEventListener to remove error of casdk
+	}
 };
 
 ///////
@@ -98,11 +100,11 @@ _getStartupSettingsOverwrite = function()
 
 
 var timer = setInterval(function(){ 
-    if ( MainMenuCtrl.prototype._invokeSelectCallback !== undefined ) {
-        MainMenuCtrl.prototype._invokeSelectCallback = _invokeSelectCallbackOverwrite;
-        clearInterval(timer);
-
-
+    if ( typeof MainMenuCtrl !== 'undefined' ) {
+        if ( MainMenuCtrl.prototype._invokeSelectCallback !== undefined ) {
+            MainMenuCtrl.prototype._invokeSelectCallback = _invokeSelectCallbackOverwrite;
+            clearInterval(timer);
+        }
     }
 }, 100);
 
@@ -122,12 +124,14 @@ if (UseNativeSDK) {
     }, 100);
 }
 
+// Fast theme apply (should be set in the proxy eventualy)
 var timer3 = setInterval(function(){ 
     var obj = document.getElementById('CommonBgImg1');
     if ( obj !== undefined ) {
         if ( localStorage.background !== undefined ) {
             try {
-                obj.style.background = localStorage.background;
+                obj.style.background = "url('" + localStorage.background  + "')";
+                framework.common._defaultBgPath = localStorage.background;
             }
             catch(e) {
 
