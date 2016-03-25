@@ -328,9 +328,8 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 			 * MultiController was moved down
 			 */
 			case this.DOWN:
-				var line = Math.floor(this.select/3);
-				var mline = Math.floor((this.max-1)/3);
-				if  (line<mline) this.select += 3;
+				this.select += 3;
+				if  (this.select > (this.max-1)) this.select = (this.max-1)
 				this.updatepos();
 				break;
 
