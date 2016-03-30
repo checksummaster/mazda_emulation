@@ -40,7 +40,7 @@ _backgroundApp.prototype.appInit = function()
         "Start": { // initial context must be called "Start"
             "sbName": "Background",
             "template": "BackgroundTmplt",
-            "templatePath": "apps/_custom/_background/templates/Background", //only needed for app-specific templates
+            "templatePath": "apps/custom/apps/_background/templates/Background", //only needed for app-specific templates
             "readyFunction": this._StartContextReady.bind(this)
         } 
     }; 

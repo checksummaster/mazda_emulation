@@ -53,7 +53,7 @@
         appName = uiaId + "App";
 
         // file path is predictable (e.g. apps/system/)
-        path = "apps/_custom/" + uiaId;
+        path = "apps/custom/apps/" + uiaId;
         jsPath = path + "/js/" + appName + ".js";
 
     } else {
@@ -437,7 +437,7 @@ window.CustomApplicationsProxy = {
     	var script = document.createElement('script');
 		document.body.appendChild(script);
 	    script.type = 'text/javascript';
-	    script.src = 'apps/_custom/additionalApps.json';
+	    script.src = 'apps/custom/apps/nativesApps.js';
 	    script.onload = function(data) {
 			for (var i = 0; i < additionalApps.length; ++i) {
 				var additionalApp = additionalApps[i];
