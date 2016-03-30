@@ -151,12 +151,14 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 		this.max = backgroundlist.length;
 		this.updatepos();
 
-    	$('#CommonBgImg1').css('background',"url('" + localStorage.background  + "')");
-		Common._defaultBgPath = localStorage.background;
-
+		if ( localStorage.background !== undefined ) {
+			var bg = $('#CommonBgImg1').css('background-image').replace('url("','').replace('")','');
+			if (bg.slice(-framework.common._defaultBgPath.length) === framework.common._defaultBgPath ) {
+	    		$('#CommonBgImg1').css('background-image',"url('" + localStorage.background  + "')");
+	    	}
+			framework.common._defaultBgPath = localStorage.background;
+		}
 	},
-
-
 
 	updatepos: function() {
 
@@ -353,7 +355,6 @@ CustomApplicationsHandler.register("app.background", new CustomApplication({
 			 * MultiController's center was pushed down
 			 */
 			case this.SELECT:
-				//document.getElementById('CommonBgImg1').style.background = "url('" + this.table[this.select].link  + "')";
 				$('#CommonBgImg1').css('background',"url('" + this.table[this.select].link  + "')");
 				framework.common._defaultBgPath = this.table[this.select].link;
 				localStorage.setItem("background", this.table[this.select].link);
