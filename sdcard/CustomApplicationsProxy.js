@@ -24,6 +24,70 @@
  *
  */
 
+////// Native apps
+
+ _addAppFilesOverwrite = function(uiaId, mmuiMsgObj)
+{
+    log.debug("framework._addAppFiles called for: " + uiaId);
+
+    var appName = null;
+    var path = null;
+    var jsPath = null;
+    var cssPath = null;
+    var cssRtlPath = null;
+
+    this._lastAppLoaded = uiaId;
+
+    if (uiaId == "common")
+    {
+        this._frameworkState = this._FWK_STATE_LOADING_CMN;
+
+        appName = uiaId;
+
+        // common is unique. "common" is not a uiaId, but we're using it here for convenience
+        path = uiaId;
+        jsPath = "common/js/Common.js";
+    } else if (uiaId.substr(0,1) === "_") {
+        this._frameworkState = this._FWK_STATE_LOADING_APP;
+
+        appName = uiaId + "App";
+
+        // file path is predictable (e.g. apps/system/)
+        path = "apps/_custom/" + uiaId;
+        jsPath = path + "/js/" + appName + ".js";
+
+    } else {
+        this._frameworkState = this._FWK_STATE_LOADING_APP;
+
+        appName = uiaId + "App";
+
+        // file path is predictable (e.g. apps/system/)
+        path = "apps/" + uiaId;
+        jsPath = path + "/js/" + appName + ".js";
+    }
+
+    // Set the CSS paths
+    cssPath = path + "/css/" + appName + ".css";
+    cssRtlPath = path + "/css/" + appName + "_rtl.css";
+
+    // store the js object for when the app finishes loading
+    this._loadingAppJsObj = mmuiMsgObj;
+
+    utility.loadCss(cssPath);
+    if (this._rtlLanguage)
+    {
+        utility.loadCss(cssRtlPath);
+    }
+    utility.loadScript(jsPath);
+
+    this._filesToLoad = new Object();
+    this._filesToLoad[appName] = false;
+
+}
+
+////// ~Native apps
+
+
 
 /**
  * (GlobalError)
@@ -130,9 +194,36 @@ window.CustomApplicationsProxy = {
 
 				// exit if handler is not available
 				if(typeof(CustomApplicationsHandler) != "undefined") {
+////// Native apps
+					if ( appData.appId.substr(0,1) === "_" ) {
 
+						for (var i = 0; i < additionalApps.length; ++i) {
+							var additionalApp = additionalApps[i];
+							if(additionalApp.name === appData.appName) {
+								framework.additionalAppName = appData.appName;
+								framework.additionalAppContext = 'Start';
+
+								CustomApplicationsProxy.targetAppName = appData.appName;
+								CustomApplicationsProxy.targetAppContext = 'Start';
+
+								appData = JSON.parse(JSON.stringify(appData));
+								appData.appName = additionalAppReplacedAppName;
+								appData.mmuiEvent = additionalAppReplacedMmuiEvent;
+								break;
+							}
+						}
+	
+					} else 
+
+////// ~Native apps
 					// launch app
 					if(CustomApplicationsHandler.launch(appData)) {
+
+////// Native apps
+
+						CustomApplicationsProxy.targetAppName = 'custom';
+						CustomApplicationsProxy.targetAppContext = 'Surface';
+////// ~Native apps
 
 						// clone app data
 						try {
@@ -338,6 +429,37 @@ window.CustomApplicationsProxy = {
 	    } catch(e) {
 	    	// failed to register applications
 	    }
+
+	    ////// Native apps
+	    GuiFramework.prototype._addAppFiles = _addAppFilesOverwrite;
+	    var category = 'Applications';
+    	var systemApp = framework.getAppInstance(this.systemAppId);
+    	var script = document.createElement('script');
+		document.body.appendChild(script);
+	    script.type = 'text/javascript';
+	    script.src = 'apps/_custom/additionalApps.json';
+	    script.onload = function(data) {
+			for (var i = 0; i < additionalApps.length; ++i) {
+				var additionalApp = additionalApps[i];
+				systemApp._masterApplicationDataList.items.push(
+					{ appData : 
+						{ 
+							appName : additionalApp.name, 
+							isVisible : true,  
+						//	mmuiEvent : 'Select'+additionalApp.name 
+							appId : additionalApp.name,
+							mmuiEvent : "SelectCustomApplication"
+						}, 
+						text1Id : additionalApp.name, 
+						disabled : false, 
+						itemStyle : 'style01', 
+						hasCaret : false
+					});
+				framework.localize._appDicts[systemAppId][additionalApp.name] = additionalApp.label;
+				framework.common._contextCategory._contextCategoryTable[additionalApp.name+'.*'] = category;
+			}
+		};
+	    ////// ~Native apps
 	},
 
 }
