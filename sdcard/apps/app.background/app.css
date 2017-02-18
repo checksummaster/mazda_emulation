@@ -43,6 +43,6 @@
 }
 
 [app="app.background"] .selectimage {
-
-    border: 3px solid #73AD21;	
+    outline: 3px solid #73AD21;
+    outline-offset: -3px;
 }
